@@ -388,3 +388,30 @@ class DataObjectManager(Manager):
         with self.sess.pool.get_connection() as conn:
             conn.send(message)
             response = conn.recv()
+
+    # Add a new one-o these for calling rsRegDataObj
+    #def addReplicaToCatalog?
+    #dataObjInfo
+    #dataReplNum
+    def addReplicaToCatalog(self, data_obj_info, **options):
+        try:
+            oprType = options[kw.OPR_TYPE_KW]
+        except KeyError:
+            oprType = 0
+
+        src = FileOpenRequest(
+            objPath=data_obj_info["objPath"],
+            createMode=0,
+            openFlags=0,
+            offset=0,
+            dataSize=0,
+            numThreads=self.sess.numThreads,
+            oprType=0,
+            KeyValPair_PI=StringStringMap(),
+        )
+        message = iRODSMessage('RODS_API_REQ', msg=message_body,
+                               int_info=api_number['REG_DATA_OBJ_AN'])
+
+        with self.sess.pool.get_connection() as conn:
+            conn.send(message)
+            response = conn.recv()
