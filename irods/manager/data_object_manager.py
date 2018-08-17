@@ -396,8 +396,8 @@ class DataObjectManager(Manager):
     def addReplicaToCatalog(self, data_obj_info, **options):
         message_body = DataObjInfo(
                 objPath=data_obj_info["objPath"],
-                rescName=data_obj_info.get("rescName", ""),
-                rescHier=data_obj_info.get("rescHier", ""),
+                rescName=data_obj_info.get("rescName", "demoResc"),
+                rescHier=data_obj_info.get("rescHier", "demoResc"),
                 dataType=data_obj_info.get("dataType", "generic"),
                 dataSize=data_obj_info.get("dataSize", "0"),
                 chksum="",
