@@ -394,16 +394,43 @@ class DataObjectManager(Manager):
     #dataObjInfo
     #dataReplNum
     def addReplicaToCatalog(self, data_obj_info, **options):
-        message_body = FileOpenRequest(
-            objPath=data_obj_info["objPath"],
-            createMode=0,
-            openFlags=0,
-            offset=0,
-            dataSize=0,
-            numThreads=self.sess.numThreads,
-            oprType=0,
-            KeyValPair_PI=StringStringMap(),
-        )
+        message_body = DataObjInfo(
+                objPath=data_obj_info["objPath"],
+                rescName=data_obj_info.get("rescName", ""),
+                rescHier=data_obj_info.get("rescHier", ""),
+                dataType="",
+                dataSize=0,
+                chksum="",
+                version="",
+                filePath="",
+                dataOwnerName="",
+                dataOwnerZone="",
+                replNum=data_obj_info.get("replNum", 0),
+                replStatus=0,
+                statusString="",
+                dataId=0,
+                collId=0,
+                dataMapId=0,
+                flags=0,
+                dataComments="",
+                dataMode="",
+                dataExpiry="",
+                dataCreate="",
+                dataModify="",
+                dataAccess="",
+                dataAccessInx=0,
+                writeFlag=0,
+                destRescName="",
+                backupRescName="",
+                subPath="",
+                specColl=0,
+                regUid=0,
+                otherFlags=0,
+                KeyValPair_PI=StringStringMap(options),
+                in_pdmo="",
+                next=0,
+                rescId=0
+                )
         message = iRODSMessage('RODS_API_REQ', msg=message_body,
                                int_info=api_number['REG_DATA_OBJ_AN'])
 
