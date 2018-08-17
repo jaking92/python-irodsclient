@@ -318,11 +318,13 @@ class DataObjectManager(Manager):
             response = conn.recv()
 
 
-    def register(self, file_path, obj_path, **options):
+    def register(self, file_path, obj_path, data_size, mtime, **options):
         options[kw.FILE_PATH_KW] = file_path
+        options[kw.DATA_MODIFY_KW] = str(mtime)
+        options[kw.DATA_SIZE_KW] = str(data_size)
 
         message_body = FileOpenRequest(
-            objPath=obj_path,
+            objPath=obj_path,0
             createMode=0,
             openFlags=0,
             offset=0,
@@ -339,8 +341,8 @@ class DataObjectManager(Manager):
             response = conn.recv()
 
     def modDataObjMeta(self, data_obj_info, meta_dict, **options):
-        #if "rescHier" not in data_obj_info and "rescName" not in data_obj_info and "replNum" not in data_obj_info:
-            #meta_dict["all"] = ""
+        if "rescHier" not in data_obj_info and "rescName" not in data_obj_info and "replNum" not in data_obj_info:
+            meta_dict["all"] = ""
             
         message_body = ModDataObjMeta(
             dataObjInfo=DataObjInfo(
