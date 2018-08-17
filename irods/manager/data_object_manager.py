@@ -339,8 +339,8 @@ class DataObjectManager(Manager):
             response = conn.recv()
 
     def modDataObjMeta(self, data_obj_info, meta_dict, **options):
-        if "rescHier" not in data_obj_info and "rescName" not in data_obj_info and "replNum" not in data_obj_info:
-            meta_dict["all"] = ""
+        #if "rescHier" not in data_obj_info and "rescName" not in data_obj_info and "replNum" not in data_obj_info:
+            #meta_dict["all"] = ""
             
         message_body = ModDataObjMeta(
             dataObjInfo=DataObjInfo(
@@ -392,10 +392,10 @@ class DataObjectManager(Manager):
     def addReplicaToCatalog(self, data_obj_info, **options):
         message_body = DataObjInfo(
                 objPath=data_obj_info["objPath"],
-                rescName=data_obj_info.get("rescName", "demoResc"),
-                rescHier=data_obj_info.get("rescHier", "demoResc"),
+                rescName=data_obj_info.get("rescName", ""),
+                rescHier=data_obj_info.get("rescHier", ""),
                 dataType=data_obj_info.get("dataType", "generic"),
-                dataSize=data_obj_info.get("dataSize", "0"),
+                dataSize=0,
                 chksum="",
                 version="",
                 filePath=data_obj_info.get("filePath", ""),
