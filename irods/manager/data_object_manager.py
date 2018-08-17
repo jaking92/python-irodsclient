@@ -396,7 +396,7 @@ class DataObjectManager(Manager):
     def addReplicaToCatalog(self, data_obj_info, **options):
         message_body = DataObjInfo(
                 objPath=data_obj_info["objPath"],
-                rescName=data_obj_info.get("rescName", ""),
+                rescName=data_obj_info.get("rescName", "demoResc"),
                 rescHier=data_obj_info.get("rescHier", ""),
                 dataType=data_obj_info.get("dataType", "generic"),
                 dataSize=data_obj_info.get("dataSize", "0"),
@@ -412,8 +412,8 @@ class DataObjectManager(Manager):
                 collId=0,
                 dataMapId=0,
                 flags=0,
-                dataComments="",
-                dataMode="",
+                dataComments="alan",
+                dataMode=0,
                 dataExpiry="",
                 dataCreate="",
                 dataModify=data_obj_info.get("dataModify", ""),
