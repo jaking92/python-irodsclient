@@ -396,7 +396,7 @@ class DataObjectManager(Manager):
     def addReplicaToCatalog(self, data_obj_info, **options):
         message_body = DataObjInfo(
                 objPath=data_obj_info["objPath"],
-                rescName=data_obj_info.get("rescName", "demoResc"),
+                rescName=data_obj_info.get("rescName", ""),
                 rescHier=data_obj_info.get("rescHier", ""),
                 dataType=data_obj_info.get("dataType", "generic"),
                 dataSize=data_obj_info.get("dataSize", "0"),
@@ -429,7 +429,7 @@ class DataObjectManager(Manager):
                 KeyValPair_PI=StringStringMap(options),
                 in_pdmo="",
                 next=0,
-                rescId=0
+                rescId=data_obj_info.get("dataId", 0),
                 )
         message = iRODSMessage('RODS_API_REQ', msg=message_body,
                                int_info=api_number['REG_DATA_OBJ_AN'])
