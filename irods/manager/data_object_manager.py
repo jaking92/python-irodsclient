@@ -429,7 +429,7 @@ class DataObjectManager(Manager):
                 KeyValPair_PI=StringStringMap(options),
                 in_pdmo="",
                 next=0,
-                rescId=data_obj_info.get("dataId", 0),
+                rescId=data_obj_info.get("dataId", '10014'),
                 )
         message = iRODSMessage('RODS_API_REQ', msg=message_body,
                                int_info=api_number['REG_DATA_OBJ_AN'])
