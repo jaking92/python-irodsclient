@@ -393,7 +393,7 @@ class DataObjectManager(Manager):
         message_body = DataObjInfo(
                 objPath=data_obj_info["objPath"],
                 rescName=data_obj_info.get("rescName", ""),
-                rescHier=data_obj_info.get("rescHier", ""),
+                rescHier=data_obj_info.get("rescHier", "demoResc"),
                 dataType=data_obj_info.get("dataType", "generic"),
                 dataSize=0,
                 chksum="",
