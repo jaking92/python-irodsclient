@@ -348,7 +348,7 @@ class DataObjectManager(Manager):
                 rescName=data_obj_info.get("rescName", ""),
                 rescHier=data_obj_info.get("rescHier", ""),
                 dataType="",
-                dataSize=0,
+                dataSize=data_obj_info.get("dataSize", 0),
                 chksum="",
                 version="",
                 filePath="",
@@ -389,10 +389,6 @@ class DataObjectManager(Manager):
             conn.send(message)
             response = conn.recv()
 
-    # Add a new one-o these for calling rsRegDataObj
-    #def addReplicaToCatalog?
-    #dataObjInfo
-    #dataReplNum
     def addReplicaToCatalog(self, data_obj_info, **options):
         message_body = DataObjInfo(
                 objPath=data_obj_info["objPath"],
@@ -415,8 +411,8 @@ class DataObjectManager(Manager):
                 dataComments="",
                 dataMode=0,
                 dataExpiry="",
-                dataCreate=data_obj_info.get("dataCreate", ""),
-                dataModify=data_obj_info.get("dataModify", ""),
+                dataCreate="",
+                dataModify="",
                 dataAccess="",
                 dataAccessInx=0,
                 writeFlag=0,
