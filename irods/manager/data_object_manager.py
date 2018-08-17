@@ -324,7 +324,7 @@ class DataObjectManager(Manager):
         options[kw.DATA_SIZE_KW] = str(data_size)
 
         message_body = FileOpenRequest(
-            objPath=obj_path,0
+            objPath=obj_path,
             createMode=0,
             openFlags=0,
             offset=0,
