@@ -394,12 +394,7 @@ class DataObjectManager(Manager):
     #dataObjInfo
     #dataReplNum
     def addReplicaToCatalog(self, data_obj_info, **options):
-        try:
-            oprType = options[kw.OPR_TYPE_KW]
-        except KeyError:
-            oprType = 0
-
-        src = FileOpenRequest(
+        message_body = FileOpenRequest(
             objPath=data_obj_info["objPath"],
             createMode=0,
             openFlags=0,
