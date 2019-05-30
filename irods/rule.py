@@ -11,11 +11,13 @@ class Rule(object):
         else:
             self.body = '@external\n' + body
 
-        if params is None:
-            self.params = {}
-        else:
-            self.params = params
-        self.output = output
+        if self.params:
+            if params is None:
+                self.params = {}
+            else:
+                self.params = params
+        if self.output:
+            self.output = output
 
     def load(self, rule_file):
         self.params = {}
