@@ -1057,11 +1057,11 @@ class TestDataObjOps(unittest.TestCase):
         # put file in test collection and replicate
         obj_path = '{collection}/{filename}'.format(**locals())
         options = {kw.DEST_RESC_NAME_KW: ufs_resources[0].name}
-        self.sess.data_objects.put(test_file, collection + '/', **options)
+        self.sess.data_objects.put(test_file, '{collection}/'.format(**locals()), **options)
         self.sess.data_objects.replicate(obj_path, ufs_resources[1].name)
 
         # ensure that replica info is populated
-        obj = self.sess.data_objects.get(obj_path, test_dir)
+        obj = self.sess.data_objects.get(obj_path)
         for i in ["number","status","resource_name","path","resc_hier"]:
             self.assertIsNotNone(obj.replicas[0].__getattribute__(i))
             self.assertIsNotNone(obj.replicas[1].__getattribute__(i))
@@ -1069,7 +1069,7 @@ class TestDataObjOps(unittest.TestCase):
         # ensure replica info is sensible
         for i in range(2):
             self.assertEqual(obj.replicas[i].number, i)
-            self.assertEqual(obj.replicas[i].status, 1)
+            self.assertEqual(obj.replicas[i].status, '1')
             self.assertEqual(obj.replicas[i].resource_name, ufs_resources[i].name)
             self.assertEqual(obj.replicas[i].path.split('/')[-1], filename)
             self.assertEqual(obj.replicas[i].resc_hier.split(';')[-1], ufs_resources[i].name)
