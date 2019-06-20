@@ -1028,6 +1028,61 @@ class TestDataObjOps(unittest.TestCase):
         # delete file
         os.remove(test_file)
 
+    def test_get_data_objects(self):
+        # Can't do one step open/create with older servers
+        if self.sess.server_version <= (4, 1, 4):
+            self.skipTest('For iRODS 4.1.5 and newer')
+
+        # test vars
+        test_dir = '/tmp'
+        filename = 'get_data_objects_test_file'
+        test_file = os.path.join(test_dir, filename)
+        collection = self.coll.path
+
+        # make random 16byte binary file
+        original_size = 16
+        with open(test_file, 'wb') as f:
+            f.write(os.urandom(original_size))
+
+        # make ufs resources
+        ufs_resources = []
+        for i in range(2):
+            resource_name = 'ufs{}'.format(i)
+            resource_type = 'unixfilesystem'
+            resource_host = self.sess.host
+            resource_path = '/tmp/{}'.format(resource_name)
+            ufs_resources.append(self.sess.resources.create(
+                resource_name, resource_type, resource_host, resource_path))
+
+        # put file in test collection and replicate
+        obj_path = '{collection}/{filename}'.format(**locals())
+        options = {kw.DEST_RESC_NAME_KW: ufs_resources[0].name}
+        self.sess.data_objects.put(test_file, collection + '/', **options)
+        self.sess.data_objects.replicate(obj_path, ufs_resources[1].name)
+
+        # ensure that replica info is populated
+        obj = self.sess.data_objects.get(obj_path, test_dir)
+        for i in ["number","status","resource_name","path","resc_hier"]:
+            self.assertIsNotNone(obj.replicas[0].__getattribute__(i))
+            self.assertIsNotNone(obj.replicas[1].__getattribute__(i))
+
+        # ensure replica info is sensible
+        for i in range(2):
+            self.assertEqual(obj.replicas[i].number, i)
+            self.assertEqual(obj.replicas[i].status, 1)
+            self.assertEqual(obj.replicas[i].resource_name, ufs_resources[i].name)
+            self.assertEqual(obj.replicas[i].path.split('/')[-1], filename)
+            self.assertEqual(obj.replicas[i].resc_hier.split(';')[-1], ufs_resources[i].name)
+
+        # remove object
+        obj.unlink(force=True)
+        # delete file
+        os.remove(test_file)
+
+        # remove ufs resources
+        for resource in ufs_resources:
+            resource.remove()
+
 
 if __name__ == '__main__':
     # let the tests find the parent irods lib
