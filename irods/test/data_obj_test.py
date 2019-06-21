@@ -1054,11 +1054,15 @@ class TestDataObjOps(unittest.TestCase):
             ufs_resources.append(self.sess.resources.create(
                 resource_name, resource_type, resource_host, resource_path))
 
+        # make passthru resource and add ufs1 as a child
+        passthru_resource = self.sess.resources.create('pt', 'passthru')
+        self.sess.resources.add_child(passthru_resource.name, ufs_resources[1].name)
+
         # put file in test collection and replicate
         obj_path = '{collection}/{filename}'.format(**locals())
         options = {kw.DEST_RESC_NAME_KW: ufs_resources[0].name}
         self.sess.data_objects.put(test_file, '{collection}/'.format(**locals()), **options)
-        self.sess.data_objects.replicate(obj_path, ufs_resources[1].name)
+        self.sess.data_objects.replicate(obj_path, passthru_resource.name)
 
         # ensure that replica info is populated
         obj = self.sess.data_objects.get(obj_path)
@@ -1070,16 +1074,21 @@ class TestDataObjOps(unittest.TestCase):
         for i in range(2):
             self.assertEqual(obj.replicas[i].number, i)
             self.assertEqual(obj.replicas[i].status, '1')
-            self.assertEqual(obj.replicas[i].resource_name, ufs_resources[i].name)
             self.assertEqual(obj.replicas[i].path.split('/')[-1], filename)
             self.assertEqual(obj.replicas[i].resc_hier.split(';')[-1], ufs_resources[i].name)
+
+        self.assertEqual(obj.replicas[0].resource_name, ufs_resources[0].name)
+        self.assertEqual(obj.replicas[i].resource_name, passthru_resource.name)
+        self.assertEqual(obj.replicas[1].resc_hier.split(';')[0], passthru_resource.name)
 
         # remove object
         obj.unlink(force=True)
         # delete file
         os.remove(test_file)
 
-        # remove ufs resources
+        # remove resources
+        self.sess.resources.remove_child(passthru_resource.name, ufs_resources[1].name)
+        passthru_resource.remove()
         for resource in ufs_resources:
             resource.remove()
 
