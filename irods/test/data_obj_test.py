@@ -1078,7 +1078,10 @@ class TestDataObjOps(unittest.TestCase):
             self.assertEqual(obj.replicas[i].resc_hier.split(';')[-1], ufs_resources[i].name)
 
         self.assertEqual(obj.replicas[0].resource_name, ufs_resources[0].name)
-        self.assertEqual(obj.replicas[i].resource_name, passthru_resource.name)
+        if self.sess.server_version < (4, 2, 0):
+            self.assertEqual(obj.replicas[i].resource_name, passthru_resource.name)
+        else:
+            self.assertEqual(obj.replicas[i].resource_name, ufs_resources[1].name)
         self.assertEqual(obj.replicas[1].resc_hier.split(';')[0], passthru_resource.name)
 
         # remove object
